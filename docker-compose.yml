@@ -1,0 +1,20 @@
+version: '3'
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - 8080:80
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        depends_on:
+            - app
+        container_name: devchallenge.final.nginx
+
+    app:
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+        volumes:
+            - ./:/var/www
+        container_name: devchallenge.final.app
