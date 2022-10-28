@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip unzip \
     git && \
+    apt-get install -y libmagickwand-dev; \
+    pecl install imagick; \
+    docker-php-ext-enable imagick; \
     docker-php-ext-install bcmath && \
     docker-php-ext-install gd && \
     docker-php-ext-install zip && \
