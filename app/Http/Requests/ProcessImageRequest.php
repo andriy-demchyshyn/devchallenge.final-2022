@@ -17,6 +17,18 @@ class ProcessImageRequest extends FormRequest
     }
 
     /**
+     * Before validation
+     * 
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if (!str_contains($this->image, 'data:image/png;base64')) {
+            abort(422, 'Wrong image type. Image should be base64 png');
+        }
+    }
+
+    /**
      * Validation rules
      * 
      * @return array
