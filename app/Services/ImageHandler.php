@@ -77,7 +77,7 @@ class ImageHandler
                 continue;
             }
     
-            $cell_index_x = ceil($x / $cell_size);
+            $cell_index_x = floor($x / $cell_size);
     
             foreach ($pixels as $y => $pixel) {
                 if ($y % ($cell_size + 1) == 0) {
@@ -89,7 +89,7 @@ class ImageHandler
                 $darkness_level = (755 + 1) - array_sum($color_array);
     
                 
-                $cell_index_y = ceil($y / $cell_size);
+                $cell_index_y = floor($y / $cell_size);
     
                 $cell_index = "x:$cell_index_x|y:$cell_index_y";
                 $cells[$cell_index] = ($cells[$cell_index] ?? 0) + $darkness_level;
