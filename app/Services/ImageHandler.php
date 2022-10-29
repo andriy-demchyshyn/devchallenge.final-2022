@@ -24,11 +24,43 @@ class ImageHandler
     }
 
     /**
+     * Filter darkest cells
+     * 
+     * @param  int  $min_level
+     * @return array
+     */
+    public function filterDarkestCells(int $min_level): array
+    {
+        $filtered_cells = [];
+
+        $image_width = $this->imagick->getImageWidth();
+        $image_height = $this->imagick->getImageHeight();
+
+        $cell_size = $this->detectCellSize();
+
+        for ($y = 0; ($y + 1) * $cell_size < $image_height; $y++) {
+            for ($x = 0; ($x + 1) * $cell_size < $image_width; $x++) {
+                $cell_darkness = $this->detectCellDarkness($x, $y, $cell_size);
+
+                if ($cell_darkness > $min_level) {
+                    $filtered_cells[] = [
+                        'x' => $x,
+                        'y' => $y,
+                        'level' => $cell_darkness,
+                    ];
+                }
+            }
+        }
+
+        return $filtered_cells;
+    }
+
+    /**
      * Detect cell size in pixels
      * 
      * @return int
      */
-    public function detectCellSize(): int
+    private function detectCellSize(): int
     {
         $image_rows_colors = '';
         $image_width = $this->imagick->getImageWidth();
@@ -66,7 +98,7 @@ class ImageHandler
      * @param  int  $cell_size
      * @return int
      */
-    public function detectCellDarkness(int $x, int $y, int $cell_size): int
+    private function detectCellDarkness(int $x, int $y, int $cell_size): int
     {
         $cell_pixel_values = [];
 
@@ -84,37 +116,5 @@ class ImageHandler
         }
 
         return floor(array_sum($cell_pixel_values) / $cell_darkness_max * 100);
-    }
-
-    /**
-     * Filter darkest cells
-     * 
-     * @param  int  $min_level
-     * @return array
-     */
-    public function filterDarkestCells(int $min_level): array
-    {
-        $filtered_cells = [];
-
-        $image_width = $this->imagick->getImageWidth();
-        $image_height = $this->imagick->getImageHeight();
-
-        $cell_size = $this->detectCellSize();
-
-        for ($y = 0; ($y + 1) * $cell_size < $image_height; $y++) {
-            for ($x = 0; ($x + 1) * $cell_size < $image_width; $x++) {
-                $cell_darkness = $this->detectCellDarkness($x, $y, $cell_size);
-
-                if ($cell_darkness > $min_level) {
-                    $filtered_cells[] = [
-                        'x' => $x,
-                        'y' => $y,
-                        'level' => $cell_darkness,
-                    ];
-                }
-            }
-        }
-
-        return $filtered_cells;
     }
 }
