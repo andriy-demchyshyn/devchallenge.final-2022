@@ -1,7 +1,26 @@
-# DEV Challenge Final
+# DEV Challenge Final '2022
+
+## Task
+We have preprocessed images of remote scanning, which reflects the probability of the location of mines on the given coordinates.
+
+Format: png, grayscale byte color model without alpha channel.
+
+Image contains:
+- x any y  coordinate grid,  which are always white and 1-pixel wide.
+- cells, numbering starting from (0,0) at the top left angle.
+
+The probability of mines located in the cell is determined by darkness (i.e. number of dark pixels inside the cell).
+
+<b>Task:</b> Create web API that will take image, process it and return coordinates of mines.
+
+<b>Full task description:</b> https://docs.google.com/document/d/1QuUdFZ3fPTpMuq6sk1urZyVMuxt4nTVOD9-z69jk2M4/edit
+
+## Solution
+Web API, based on php backend (Laravel framework) and ImageMagick image processing.
 
 ## Stack
 - PHP 8.1
+- ImageMagick
 - Laravel 9
 
 ## How to start service
@@ -12,5 +31,4 @@
 
 ## API Endpoints
 - <b>POST:</b> <code>http\://127.0.0.1:8080/api/image-input</code>\
-  PHP Class: <code>app\Http\Controllers\ImageController::class</code>\
-  Method: <code>process</code>
+  Controller: <code>app\Http\Controllers\ImageController::class</code>\
