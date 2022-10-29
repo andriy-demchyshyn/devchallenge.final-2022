@@ -40,8 +40,6 @@ Response:
 }
 ```
 
-<b>Full task description:</b> https://docs.google.com/document/d/1QuUdFZ3fPTpMuq6sk1urZyVMuxt4nTVOD9-z69jk2M4/edit
-
 <b>Example image:</b>
 * Image should be passed as base64 DataURI string
 <img src="example-image.png" alt="Example image">
