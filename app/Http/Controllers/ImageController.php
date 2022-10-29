@@ -8,13 +8,6 @@ use App\Services\ImageHandler;
 class ImageController extends Controller
 {
     /**
-     * Create a new controller instance
-     * 
-     * @return void
-     */
-    public function __construct() {}
-
-    /**
      * Process image and detect darkest cells
      * 
      * @param  \App\Http\Requests\ProcessImageRequest  $request
