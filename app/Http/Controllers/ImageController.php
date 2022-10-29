@@ -23,7 +23,7 @@ class ImageController extends Controller
     public function process(ProcessImageRequest $request)
     {
         $image_handler = new ImageHandler($request->image);
-        $mines =  $image_handler->filterDarkestCells($request->min_level);
+        $mines = $image_handler->filterDarkestCells($request->min_level);
         return response()->json(['mines' => $mines], 200);
     }
 }
