@@ -11,9 +11,20 @@ Image contains:
 
 The probability of mines located in the cell is determined by darkness (i.e. number of dark pixels inside the cell).
 
-<b>Task:</b> Create web API that will take image, process it and return coordinates of mines.
+<b>Task:</b> Create web API that will take image (png image as base64 DataURI string), process it and return coordinates of mines.
+
+```
+{
+  "min_level": 75, // integer 0 - 100
+  "image": "..." //  png image as base64 DataURI string
+}
+```
 
 <b>Full task description:</b> https://docs.google.com/document/d/1QuUdFZ3fPTpMuq6sk1urZyVMuxt4nTVOD9-z69jk2M4/edit
+
+<b>Example image:</b>
+* Image should be passed as base64 DataURI string
+<img src="example-image.png" alt="Example image">
 
 ## Solution
 Web API, based on php backend (Laravel framework) and ImageMagick image processing.
