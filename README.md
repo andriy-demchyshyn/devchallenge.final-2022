@@ -14,20 +14,28 @@ The probability of mines located in the cell is determined by darkness (i.e. num
 <b>Task:</b> Create web API that will take image (png image as base64 DataURI string), process it and return coordinates of mines.
 
 ```
-POST: http\://127.0.0.1:8080/api/image-input
+POST: http://127.0.0.1:8080/api/image-input
 
-params:
+POST body:
 {
     "min_level": 75, // integer 0 - 100
     "image": "..." //  png image as base64 DataURI string
 }
 
-response:
+Response:
 {
     "mines": [
-      "x": 0, // x coordinate of cell
-      "y": 0, // y coordinate of cell
-      "level": 83 // integer 0 - 100
+        {
+            "x": 0, // x coordinate of cell
+            "y": 0, // y coordinate of cell
+            "level": 94 // integer 0 - 100
+        },
+        {
+            "x": 6, // x coordinate of cell
+            "y": 5, // y coordinate of cell
+            "level": 100 // integer 0 - 100
+        },
+        ...
     ]
 }
 ```
@@ -40,6 +48,8 @@ response:
 
 ## Solution
 Web API, based on php backend (Laravel framework) and ImageMagick image processing.
+- Controller: <code>app\Http\Controllers\ImageController::class</code>
+- ImageHandler Service: <code>app\Services\ImageHandler::class</code>
 
 ## Stack
 - PHP 8.1
@@ -51,7 +61,3 @@ Web API, based on php backend (Laravel framework) and ImageMagick image processi
 2. SSH connect to Docker container: <code>docker exec -it devchallenge.final.app bash</code>
 3. Install composer dependencies. Run in terminal: <code>composer install</code>
 4. Run test in terminal: <code>php artisan test</code>
-
-## API Endpoints
-- <b>POST:</b> <code>http\://127.0.0.1:8080/api/image-input</code>\
-  Controller: <code>app\Http\Controllers\ImageController::class</code>\
