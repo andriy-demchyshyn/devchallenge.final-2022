@@ -5,6 +5,11 @@ namespace App\Services;
 class ImageHandler
 {
     /**
+     * Sum of rgb color channels values (255 + 255 + 255)
+     */
+    const RGB_COLOR_SUM = 765;
+
+    /**
      * Imagick instance
      */
     private \Imagick $imagick;
@@ -73,7 +78,7 @@ class ImageHandler
                 $color = $this->imagick->getImagePixelColor($x, $y);
                 $color_array = $color->getColor();
                 $color_sum = array_sum($color_array);
-                if ($color_sum >= 765) {
+                if ($color_sum >= self::RGB_COLOR_SUM) {
                     $row_white_pixels_count++;
                 }
             }
@@ -102,7 +107,7 @@ class ImageHandler
     {
         $cell_pixel_values = [];
 
-        $cell_darkness_max = $cell_size * $cell_size * 765;
+        $cell_darkness_max = $cell_size * $cell_size * self::RGB_COLOR_SUM;
 
         $area_iterator = $this->imagick->getPixelRegionIterator(($x * ($cell_size + 1) + 1), ($y * ($cell_size + 1) + 1), $cell_size, $cell_size);
 
@@ -110,7 +115,7 @@ class ImageHandler
             foreach ($row_iterator as $pixel) {
                 $colors = $pixel->getColor();
                 unset($colors['a']); // Unset alpha-channel
-                $cell_pixel_values[] = 765 - array_sum($colors);
+                $cell_pixel_values[] = self::RGB_COLOR_SUM - array_sum($colors);
             }
             $area_iterator->syncIterator();
         }
