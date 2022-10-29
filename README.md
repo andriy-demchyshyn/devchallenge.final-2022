@@ -14,9 +14,21 @@ The probability of mines located in the cell is determined by darkness (i.e. num
 <b>Task:</b> Create web API that will take image (png image as base64 DataURI string), process it and return coordinates of mines.
 
 ```
+POST: http\://127.0.0.1:8080/api/image-input
+
+params:
 {
-  "min_level": 75, // integer 0 - 100
-  "image": "..." //  png image as base64 DataURI string
+    "min_level": 75, // integer 0 - 100
+    "image": "..." //  png image as base64 DataURI string
+}
+
+response:
+{
+    "mines": [
+      "x": 0, // x coordinate of cell
+      "y": 0, // y coordinate of cell
+      "level": 83 // integer 0 - 100
+    ]
 }
 ```
 
