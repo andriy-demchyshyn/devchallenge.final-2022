@@ -61,46 +61,29 @@ class ImageHandler
     /**
      * Detect darkness of each cell
      * 
-     * @return array
+     * @param  int  $x
+     * @param  int  $y
+     * @param  int  $cell_size
+     * @return int
      */
-    public function detectDarkness(): array
+    public function detectCellDarkness(int $x, int $y, int $cell_size): int
     {
-        $cells = [];
-        $cell_size = $this->detectCellSize();
-        
-        $cell_darkness_max = $cell_size * $cell_size * (755 + 1);
-    
-        $imageIterator = $this->imagick->getPixelIterator();
-    
-        foreach ($imageIterator as $x => $pixels) {
-            if ($x % ($cell_size + 1) == 0) {
-                continue;
+        $cell_pixel_values = [];
+
+        $cell_darkness_max = $cell_size * $cell_size * 765;
+
+        $area_iterator = $this->imagick->getPixelRegionIterator(($x * ($cell_size + 1) + 1), ($y * ($cell_size + 1) + 1), $cell_size, $cell_size);
+
+        foreach ($area_iterator as $row_iterator) {
+            foreach ($row_iterator as $pixel) {
+                $colors = $pixel->getColor();
+                unset($colors['a']); // Unset alpha-channel
+                $cell_pixel_values[] = 765 - array_sum($colors);
             }
-    
-            $cell_index_x = floor($x / $cell_size);
-    
-            foreach ($pixels as $y => $pixel) {
-                if ($y % ($cell_size + 1) == 0) {
-                    continue;
-                }
-    
-                $color = $this->imagick->getImagePixelColor($x, $y);
-                $color_array = $color->getColor();
-                $darkness_level = (755 + 1) - array_sum($color_array);
-    
-                
-                $cell_index_y = floor($y / $cell_size);
-    
-                $cell_index = "x:$cell_index_x|y:$cell_index_y";
-                $cells[$cell_index] = ($cells[$cell_index] ?? 0) + $darkness_level;
-            }
-    
-            $imageIterator->syncIterator();
+            $area_iterator->syncIterator();
         }
 
-        $cells = array_map(fn($value) => ceil($value / $cell_darkness_max * 100), $cells);
-    
-        return $cells;
+        return floor(array_sum($cell_pixel_values) / $cell_darkness_max * 100);
     }
 
     /**
@@ -111,20 +94,24 @@ class ImageHandler
      */
     public function filterDarkestCells(int $min_level): array
     {
-        $cells = $this->detectDarkness();
         $filtered_cells = [];
 
-        foreach ($cells as $key => $value) {
-            if ($value > $min_level) {
-                $key_data = explode('|', $key);
-                $axis_x_data = explode(':', $key_data[0]);
-                $axis_y_data = explode(':', $key_data[1]);
+        $image_width = $this->imagick->getImageWidth();
+        $image_height = $this->imagick->getImageHeight();
 
-                $filtered_cells[] = [
-                    'x' => $axis_x_data[1],
-                    'y' => $axis_y_data[1],
-                    'level' => $value,
-                ];
+        $cell_size = $this->detectCellSize();
+
+        for ($y = 0; ($y + 1) * $cell_size < $image_height; $y++) {
+            for ($x = 0; ($x + 1) * $cell_size < $image_width; $x++) {
+                $cell_darkness = $this->detectCellDarkness($x, $y, $cell_size);
+
+                if ($cell_darkness > $min_level) {
+                    $filtered_cells[] = [
+                        'x' => $x,
+                        'y' => $y,
+                        'level' => $cell_darkness,
+                    ];
+                }
             }
         }
 
