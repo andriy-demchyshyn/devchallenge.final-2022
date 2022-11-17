@@ -17,15 +17,22 @@ class ImageHandler
     /**
      * Create a new image handler instance
      * 
+     * @return void
+     */
+    public function __construct() {
+        $this->imagick = new \Imagick();
+    }
+
+    /**
+     * Add image to processing
+     * 
      * @param  string  $base64_image
      * @return void
      */
-    public function __construct(string $base64_image) {
+    public function processImage(string $base64_image): void
+    {
         $image_data = substr($base64_image, strpos($base64_image, ',') + 1);
-        $image = base64_decode($image_data);
-
-        $this->imagick = new \Imagick();
-        $this->imagick->readImageBlob($image);
+        $this->imagick->readImageBlob(base64_decode($image_data));
     }
 
     /**
